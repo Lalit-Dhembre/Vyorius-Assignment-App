@@ -127,7 +127,9 @@ fun VideoScreen(
 
             withContext(Dispatchers.IO) {
                 val media = Media(libVLC, Uri.parse(rtspUrl)).apply {
-                    addOption(":sout=#file{dst=$outputPath}")
+//                    addOption(":sout=#file{dst=$outputPath}")
+                    addOption(":sout=#duplicate{dst=file{dst=$outputPath}, dst=display}")
+                    addOption("-vvv")
                     addOption(":sout-keep")
                     addOption(":no-sout-all")
                     addOption(":sout-avformat-mux=mp4")
