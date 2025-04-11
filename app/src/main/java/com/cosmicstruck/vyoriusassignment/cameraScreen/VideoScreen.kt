@@ -1,5 +1,6 @@
 package com.cosmicstruck.vyoriusassignment.cameraScreen
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.*
 import android.content.pm.ActivityInfo
@@ -7,7 +8,6 @@ import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.util.Rational
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -25,11 +25,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.cosmicstruck.vyoriusassignment.R
 import com.cosmicstruck.vyoriusassignment.ui.theme.VyoriusTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
@@ -68,8 +68,7 @@ class VideoScreenActivity : ComponentActivity() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 when (intent?.action) {
                     "ACTION_PAUSE" -> {
-                        Log.d("CHECKING_RECEIVER", "Pause button clicked in PiP")
-                        // Add pause/stop logic if needed
+
                     }
                 }
             }
@@ -86,13 +85,12 @@ class VideoScreenActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun VideoScreen(
     isPip: Boolean,
     rtspUrl: String,
     onRecordingStopped: () -> Unit,
-    videoScreenViewModel: VideoScreenViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
@@ -104,6 +102,7 @@ fun VideoScreen(
             arrayListOf("--no-drop-late-frames", "--no-skip-frames", "--rtsp-tcp")
         )
     }
+    var secondsElapsed by remember { mutableIntStateOf(0) }
 
     val mediaPlayer = remember { MediaPlayer(libVLC) }
     var isRecordingStarted by remember { mutableStateOf(false) }
@@ -111,6 +110,11 @@ fun VideoScreen(
     val outputPath = remember {
         "/sdcard/Download/stream_${System.currentTimeMillis()}.mp4"
     }
+
+    var recordingStarted by remember { mutableStateOf(false) }
+    val connectionStatus = remember { mutableStateOf("Connecting...") }
+    val connectionColor = remember { mutableStateOf(Color.Yellow) }
+
 
     DisposableEffect(Unit) {
         onDispose {
@@ -143,6 +147,18 @@ fun VideoScreen(
             }
         }
     }
+    LaunchedEffect(isRecordingStarted) {
+        while (true){
+            delay(1000L)
+            secondsElapsed++
+        }
+    }
+
+    val formattedTime = String.format(
+        "%02d:%02d",
+        secondsElapsed / 60,
+        secondsElapsed % 60
+    )
 
     Box(
         modifier = Modifier
@@ -160,13 +176,35 @@ fun VideoScreen(
             },
             modifier = Modifier.fillMaxSize()
         )
+        mediaPlayer.setEventListener { event ->
+            when (event.type) {
+                MediaPlayer.Event.Opening -> {
+                    connectionStatus.value = "🟡 Connecting..."
+                    connectionColor.value = Color.Yellow
+                }
+                MediaPlayer.Event.Playing -> {
+                    connectionStatus.value = "🟢 Connected"
+                    connectionColor.value = Color.Green
+                    isRecordingStarted = true
+                }
+                MediaPlayer.Event.EndReached, MediaPlayer.Event.Stopped -> {
+                    connectionStatus.value = "⚫ Disconnected"
+                    connectionColor.value = Color.Red
+                }
+                MediaPlayer.Event.EncounteredError -> {
+                    connectionStatus.value = "🔴 Connection Failed"
+                    connectionColor.value = Color.Red
+                }
+            }
+        }
+
 
         if (!isPip) {
             IconButton(
                 onClick = {
                     if (isRecordingStarted) {
                         mediaPlayer.stop()
-                        Toast.makeText(context, "Recording saved", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Recording saved to Downloads", Toast.LENGTH_SHORT).show()
                         onRecordingStopped()
                     }
                 },
@@ -210,6 +248,23 @@ fun VideoScreen(
                     tint = Color.White
                 )
             }
+
+            Text(
+                text = "🔴 "+formattedTime,
+                modifier = Modifier
+                    .align(alignment = Alignment.BottomCenter),
+                color = Color.Red,
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Text(
+                text = connectionStatus.value,
+                color = connectionColor.value,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(12.dp),
+                style = MaterialTheme.typography.labelLarge
+            )
 
             Text(
                 text = rtspUrl,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -23,10 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.cosmicstruck.vyoriusassignment.R
 import com.cosmicstruck.vyoriusassignment.cameraScreen.VideoScreenActivity
+import com.cosmicstruck.vyoriusassignment.homeScreen.components.InfiniteLottieAnimation
 
 @Composable
 fun HomeScreen(
@@ -56,6 +58,11 @@ fun HomeScreen(
                     alignment = Alignment.CenterVertically
                 )
             ) {
+                InfiniteLottieAnimation(
+                    animationRes = R.raw.drone_animation,
+                    modifier = Modifier
+                        .size(150.dp)
+                )
                 Text(
                     text = "Vyorius Assignment App",
                     style = MaterialTheme.typography.headlineLarge,
@@ -95,13 +102,13 @@ fun HomeScreen(
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-//                        else if (!homeScreenViewModel.urlTextState.value.matches(Regex("^rtsp://[a-zA-Z0-9.-]+(:[0-9]+)?(/[^\\s]*)?\$"))){
-//                            Toast.makeText(
-//                                context,
-//                                "URL NOT SUITABLE",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
+                        else if (!homeScreenViewModel.urlTextState.value.startsWith("rtsp://")){
+                            Toast.makeText(
+                                context,
+                                "URL NOT SUITABLE",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                         else{
                             val encodedUrl = Uri.encode(homeScreenViewModel.urlTextState.value)
 //                            navigateToHomeScreen(encodedUrl)

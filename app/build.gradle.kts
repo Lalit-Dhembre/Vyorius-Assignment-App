@@ -59,6 +59,8 @@ dependencies {
     implementation("androidx.media3:media3-ui:1.5.1")
     implementation("org.videolan.android:libvlc-all:3.5.1")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
 
 
     val camerax_version = "1.5.0-alpha06"
