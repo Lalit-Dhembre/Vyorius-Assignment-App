@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp") version "2.0.0-1.0.24"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.28"
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10"
 
@@ -49,17 +49,24 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     //Navigation
-    implementation("androidx.navigation:navigation-compose:2.8.1")
+    implementation("androidx.navigation:navigation-compose:2.9.0")
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.work:work-runtime-ktx:2.10.0")
-    implementation("androidx.media3:media3-exoplayer:1.5.1")
-    implementation("androidx.media3:media3-exoplayer-dash:1.5.1")
-    implementation("androidx.media3:media3-ui:1.5.1")
+    implementation("androidx.work:work-runtime-ktx:2.10.1")
+    implementation("androidx.media3:media3-exoplayer:1.7.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.7.1")
+    implementation("androidx.media3:media3-ui:1.7.1")
     implementation("org.videolan.android:libvlc-all:3.5.1")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.8")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.8.2")
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+
+    implementation("com.github.pedroSG94.RootEncoder:library:2.6.1")
+    //Optional, allow use CameraXSource and CameraUvcSource
+    implementation("com.github.pedroSG94.RootEncoder:extra-sources:2.6.1")
+
+
+
 
 
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -32,6 +33,7 @@ import com.cosmicstruck.vyoriusassignment.homeScreen.components.InfiniteLottieAn
 
 @Composable
 fun HomeScreen(
+    navigateToStreamScreen: () -> Unit,
     navigateToHomeScreen: (String) -> Unit,
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
     modifier: Modifier = Modifier) {
@@ -59,12 +61,12 @@ fun HomeScreen(
                 )
             ) {
                 InfiniteLottieAnimation(
-                    animationRes = R.raw.drone_animation,
+                    animationRes = R.raw.stream_animation,
                     modifier = Modifier
                         .size(150.dp)
                 )
                 Text(
-                    text = "Vyorius Assignment App",
+                    text = "Cam Stream",
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Center
                 )
@@ -93,46 +95,69 @@ fun HomeScreen(
                         .fillMaxWidth(0.8f)
                 )
 
-                Button(
-                    onClick = {
-                        if (homeScreenViewModel.urlTextState.value.isEmpty()){
-                            Toast.makeText(
-                                context,
-                                "URL Cannot be Empty",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        else if (!homeScreenViewModel.urlTextState.value.startsWith("rtsp://")){
-                            Toast.makeText(
-                                context,
-                                "URL NOT SUITABLE",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        else{
-                            val encodedUrl = Uri.encode(homeScreenViewModel.urlTextState.value)
-//                            navigateToHomeScreen(encodedUrl)
-                            val intent = Intent(context, VideoScreenActivity::class.java).apply {
-                                putExtra("URL",encodedUrl)
-                            }
-                            context.startActivity(intent)
-                        }
-
-                    },
-                    shape = RectangleShape,
-                    modifier = Modifier
-                        .width(100.dp),
-                    colors = ButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
-                        disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
-                        disabledContentColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Start",
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                    Button(
+                        onClick = {
+                            if (homeScreenViewModel.urlTextState.value.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "URL Cannot be Empty",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (!homeScreenViewModel.urlTextState.value.startsWith("rtsp://")) {
+                                Toast.makeText(
+                                    context,
+                                    "URL NOT SUITABLE",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val encodedUrl = Uri.encode(homeScreenViewModel.urlTextState.value)
+    //                            navigateToHomeScreen(encodedUrl)
+                                val intent = Intent(context, VideoScreenActivity::class.java).apply {
+                                    putExtra("URL", encodedUrl)
+                                }
+                                context.startActivity(intent)
+                            }
+
+                        },
+                        shape = RectangleShape,
+                        modifier = Modifier
+                            .width(100.dp),
+                        colors = ButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
+                            disabledContentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = "Start",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
+
+
+                    Button(
+                        onClick = {
+                            navigateToStreamScreen()
+                        },
+                        shape = RectangleShape,
+                        modifier = Modifier,
+                        colors = ButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
+                            disabledContentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(
+                            text = "Start Streaming",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
         }

@@ -18,7 +18,9 @@ class MainActivity : ComponentActivity() {
     private val requiredPermissions = arrayOf(
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
         android.Manifest.permission.POST_NOTIFICATIONS,
-        android.Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
+        android.Manifest.permission.CAMERA,
+        android.Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK,
+        android.Manifest.permission.ACCESS_WIFI_STATE
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
