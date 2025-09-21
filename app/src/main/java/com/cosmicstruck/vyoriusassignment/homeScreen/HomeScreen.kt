@@ -30,11 +30,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.cosmicstruck.vyoriusassignment.R
 import com.cosmicstruck.vyoriusassignment.cameraScreen.VideoScreenActivity
 import com.cosmicstruck.vyoriusassignment.homeScreen.components.InfiniteLottieAnimation
+import com.cosmicstruck.vyoriusassignment.streamingScreen.StreamingActivity
 
 @Composable
 fun HomeScreen(
-    navigateToStreamScreen: () -> Unit,
-    navigateToHomeScreen: (String) -> Unit,
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
     modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -142,7 +141,8 @@ fun HomeScreen(
 
                     Button(
                         onClick = {
-                            navigateToStreamScreen()
+                            val intent = Intent(context, StreamingActivity::class.java)
+                            context.startActivity(intent)
                         },
                         shape = RectangleShape,
                         modifier = Modifier,

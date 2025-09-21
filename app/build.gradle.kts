@@ -45,6 +45,10 @@ android {
 
 dependencies {
     implementation("com.google.dagger:hilt-android:2.52")
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     ksp("com.google.dagger:hilt-android-compiler:2.52")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
@@ -61,11 +65,13 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:1.8.2")
     implementation("com.airbnb.android:lottie-compose:6.3.0")
 
+    implementation(libs.rtsp.server)
+//    implementation("com.github.pedroSG94.rtsp-rtmp-stream-client-java:rtspserver:2.1.9")
     implementation("com.github.pedroSG94.RootEncoder:library:2.6.1")
     //Optional, allow use CameraXSource and CameraUvcSource
     implementation("com.github.pedroSG94.RootEncoder:extra-sources:2.6.1")
 
-
+    implementation("com.github.pedroSG94.RootEncoder:rtsp:2.6.1")
 
 
 

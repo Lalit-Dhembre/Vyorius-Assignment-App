@@ -20,7 +20,9 @@ class MainActivity : ComponentActivity() {
         android.Manifest.permission.POST_NOTIFICATIONS,
         android.Manifest.permission.CAMERA,
         android.Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK,
-        android.Manifest.permission.ACCESS_WIFI_STATE
+        android.Manifest.permission.ACCESS_WIFI_STATE,
+        android.Manifest.permission.FOREGROUND_SERVICE_MICROPHONE,
+        android.Manifest.permission.RECORD_AUDIO,
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
